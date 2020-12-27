@@ -1,30 +1,22 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Category;
 use App\Models\Post;
+use App\Models\Category;
 
-class CategoriesController extends Controller
+class ShowByCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-       // $this->middleware('auth');
-
-        
-    }
     public function index()
     {
-        //$arr['category'] = Category::all();
-       // return view('admin/categories/categories')->with($arr);
-       return Category::all();
+        return Category::all();
+        
     }
 
     /**
@@ -34,7 +26,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        return view('admin/categories/create_category');
+        //
     }
 
     /**
@@ -43,12 +35,9 @@ class CategoriesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,category $category)
+    public function store(Request $request)
     {
-        $category->title = $request->title;
-        
-        $category->save();
-        return redirect()->route('cat.categories.index');
+        //
     }
 
     /**
@@ -59,7 +48,9 @@ class CategoriesController extends Controller
      */
     public function show($id)
     {
-        //
+        $posts =post::where('category_id',$id)->get();
+
+        return $posts;
     }
 
     /**
@@ -68,10 +59,9 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(category $category)
+    public function edit($id)
     {
-        $arr['category'] = $category;
-        return view('admin/categories/edit_category')->with($arr);
+        //
     }
 
     /**
@@ -81,12 +71,9 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, category $category)
+    public function update(Request $request, $id)
     {
-        $category->title = $request->title;
-        $category->save();
-         // return redirect('admin');
-         return redirect()->route('cat.categories.index');
+        //
     }
 
     /**
@@ -97,7 +84,6 @@ class CategoriesController extends Controller
      */
     public function destroy($id)
     {
-        category::destroy($id);
-        return redirect()->route('cat.categories.index');
+        //
     }
 }

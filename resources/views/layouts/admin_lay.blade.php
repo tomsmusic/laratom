@@ -301,9 +301,12 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <div class="container-fluid">
+                
                 @yield('content')
+
             </div>
         </div>
+        
         <!-- ./wrapper -->
 
         <!-- jQuery -->

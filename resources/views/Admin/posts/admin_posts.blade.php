@@ -8,7 +8,7 @@
     <table class="table table-hover">
   <thead>
     <tr>
-      <th scope="col">#</th>
+      <th scope="col">id</th>
       <th scope="col">Title</th>
       <th scope="col">category</th>
       <th scope="col">Action</th>
@@ -18,7 +18,7 @@
     @if(count($post))
   @foreach($post as $p)
     <tr>
-      <th scope="row">1</th>
+      <th scope="row">{{$p->id}}</th>
       <td>{{$p->Title}}</td>
       <td>{{$p->category->title}}</td>
       
@@ -38,8 +38,12 @@
     <tr><td>No post found</td></tr>
     @endif
   </tbody>
-
+  
 </table>
 
+
+<div class="pagination">
+{{ $post->links('pagination::bootstrap-4') }}
+</div>
  
 @endsection

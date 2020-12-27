@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use App\Http\Resources\PostResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
@@ -16,15 +16,17 @@ class PostsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+       // $this->middleware('auth');
 
         
     }
     public function index()
     {
-        $arr['post'] = post::all();
-        //$arr['category'] = category::all();
-        return view('admin/posts/admin_posts')->with($arr);
+       $arr['post'] = Post::with('category')->paginate(3);
+        
+       // return view('admin/posts/admin_posts')->with($arr);
+      // $posts =  Post::all();
+       return $arr['post'];
     }
 
     /**
@@ -34,8 +36,9 @@ class PostsController extends Controller
      */
     public function create()
     {
+        //$this->middleware('auth');
         $arr['category'] = Category::all();
-        return view('admin/posts/create_posts')->with($arr);
+       // return view('admin/posts/create_posts')->with($arr);
     }
 
     /**
@@ -46,7 +49,7 @@ class PostsController extends Controller
      */
     public function store(Request $request,post $post)
     {
-        if($request->image->getClientOriginalName()){
+       /* if($request->image->getClientOriginalName()){
         $ext = $request->image->getClientOriginalExtension();
         $file = date('YmdHis').rand(1,999999).'.'.$ext;
         $request->image->storeAs('public/posts',$file);
@@ -61,7 +64,9 @@ class PostsController extends Controller
         $post->post = $request->post;
         $post->author = $request->author;
         $post->save();
-        return redirect()->route('admin.posts.index');
+        return redirect()->route('admin.posts.index');*/
+
+        return Post::create($request->all());
     }
 
     /**
@@ -70,9 +75,9 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post): PostResource
     {
-        //
+        return new PostResource($post);
     }
 
     /**
@@ -83,6 +88,7 @@ class PostsController extends Controller
      */
     public function edit(Post $post)
     {
+        $this->middleware('auth');
         $arr['category'] = Category::all();
         $arr['post'] = $post;
         return view('admin/posts/edit_posts')->with($arr);
@@ -95,8 +101,9 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,post $post)
+    public function update(Request $request,$id)
     {
+       /* $this->middleware('auth');
         
         if(isset($request->image) && $request->image->getClientOriginalName()){
             $ext = $request->image->getClientOriginalExtension();
@@ -114,8 +121,13 @@ class PostsController extends Controller
             $post->title = $request->title;
             $post->post = $request->post;
             $post->author = $request->author;
+            $post->catagory_id = $request->category_id;
             $post->save();
-            return redirect()->route('admin.posts.index');
+            return redirect()->route('admin.posts.index');*/
+
+            $post = Post::find($id);
+            $post->update($request->all());
+            return $post;
     }
 
     /**
@@ -126,7 +138,9 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
+       /* $this->middleware('auth');
         post::destroy($id);
-        return redirect()->route('admin.posts.index');
+        return redirect()->route('admin.posts.index');*/
+        return Post::destroy($id);
     }
 }
